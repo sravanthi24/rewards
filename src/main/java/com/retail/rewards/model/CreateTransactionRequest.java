@@ -11,6 +11,6 @@ public class CreateTransactionRequest {
     private String phoneNumber;
     private String name;
     private Double billAmount;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate transactionDate;
 }

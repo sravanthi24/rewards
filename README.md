@@ -34,3 +34,8 @@ The reward points will be calculated by getting the information from reward_poin
 2.	mvn clean install
 3.	mvn spring-boot:run
 
+# Database Connectivity
+1.  http://localhost:8080/h2-ui
+2.  JDBC URL:jdbc:h2:mem:retailDB
+3.  username : sa
+4.  password :

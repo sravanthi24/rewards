@@ -39,7 +39,7 @@ class RetailExceptionHandlerTest {
         RetailExceptionHandler retailExceptionController = new RetailExceptionHandler();
         Exception ex = new Exception("An error occurred");
         ResponseEntity<Object> actualHandleAllExceptionsResult = retailExceptionController.handleAllExceptions(ex);
-        assertEquals(ex.getMessage() + " Sorry something went wrong please try after sometime", actualHandleAllExceptionsResult.getBody());
+        assertEquals("Sorry something went wrong please try after sometime", actualHandleAllExceptionsResult.getBody());
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, actualHandleAllExceptionsResult.getStatusCode());
         assertTrue(actualHandleAllExceptionsResult.getHeaders().isEmpty());
     }
