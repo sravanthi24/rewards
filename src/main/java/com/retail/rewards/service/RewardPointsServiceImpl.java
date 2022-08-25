@@ -86,11 +86,13 @@ public class RewardPointsServiceImpl implements RewardPointsService{
     public List<GetAllRewardPoints> getRewardPointsForAllCustomer() {
         List<GetAllRewardPoints> list = new ArrayList<>();
         List<Object[]> listObjs = transactionRepository.getCountForAllCustomer();
-        for (Object[] object : listObjs) {
-            GetAllRewardPoints points = new GetAllRewardPoints();
-            points.setPhoneNumber(String.valueOf(object[0]));
-            points.setRewardPoints(String.valueOf(object[1]));
-            list.add(points);
+        if(listObjs!=null && !listObjs.isEmpty()) {
+            for (Object[] object : listObjs) {
+                GetAllRewardPoints points = new GetAllRewardPoints();
+                points.setPhoneNumber(String.valueOf(object[0]));
+                points.setRewardPoints(String.valueOf(object[1]));
+                list.add(points);
+            }
         }
         return list;
     }

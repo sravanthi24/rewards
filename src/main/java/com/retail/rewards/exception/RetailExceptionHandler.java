@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ControllerAdvice
-public class RetailExceptionController {
+public class RetailExceptionHandler {
     @ExceptionHandler(value = RecordNotFoundException.class)
     public ResponseEntity<List<Error>> exception(RecordNotFoundException ex) {
         ApiErrorCode apiErrorCode = ex.getApiErrorCode();
@@ -20,8 +20,8 @@ public class RetailExceptionController {
     }
 
     @ExceptionHandler(Exception.class)
-    public final ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request) {
-        return new ResponseEntity<>("Sorry something went wrong please try after sometime", HttpStatus.INTERNAL_SERVER_ERROR);
+    public final ResponseEntity<Object> handleAllExceptions(Exception ex) {
+        return new ResponseEntity<>(ex.getMessage() +" Sorry something went wrong please try after sometime",HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     public ResponseEntity<List<Error>> generateClientResponse(ApiErrorCode apiError,HttpStatus status){
