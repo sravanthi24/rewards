@@ -21,7 +21,8 @@ Example 2: The reward program starts with $20 and above as 1, $50 and above as 2
 The reward points will be calculated by getting the information from reward_points table.
 
 <b>Note:</b> Swagger is configured with the application (http://localhost:8080/swagger-ui/index.html#) <br>
-<b><i>To Maintain security Masking of PhoneNumber is enabled in responses and logging</i></b>
+Please refer documentation folder for postman collection and artifacts.<br>
+<b><i>To Maintain security Masking of PhoneNumber is enabled in responses and logging.</i></b>
 
 # Technologies used
 •	Spring boot <br>
