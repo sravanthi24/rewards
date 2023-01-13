@@ -1,15 +1,18 @@
 package com.retail.rewards.exception;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.retail.rewards.model.ApiErrorCode;
 import com.retail.rewards.model.Error;
-import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Disabled;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 class RetailExceptionHandlerTest {
     /**
@@ -17,8 +20,8 @@ class RetailExceptionHandlerTest {
      */
     @Test
     void testException() {
-        RetailExceptionHandler retailExceptionController = new RetailExceptionHandler();
-        ResponseEntity<List<Error>> actualExceptionResult = retailExceptionController
+        RetailExceptionHandler retailExceptionHandler = new RetailExceptionHandler();
+        ResponseEntity<List<Error>> actualExceptionResult = retailExceptionHandler
                 .exception(new RecordNotFoundException(ApiErrorCode.INVALID_PHONENUMBER));
         List<Error> body = actualExceptionResult.getBody();
         assertEquals(1, body.size());
@@ -30,20 +33,18 @@ class RetailExceptionHandlerTest {
         assertEquals("Invalid Phone Number", getResult.getErrorDescription());
     }
 
-
     /**
      * Method under test: {@link RetailExceptionHandler#handleAllExceptions(Exception)}
      */
     @Test
     void testHandleAllExceptions() {
-        RetailExceptionHandler retailExceptionController = new RetailExceptionHandler();
-        Exception ex = new Exception("An error occurred");
-        ResponseEntity<Object> actualHandleAllExceptionsResult = retailExceptionController.handleAllExceptions(ex);
+        RetailExceptionHandler retailExceptionHandler = new RetailExceptionHandler();
+        ResponseEntity<Object> actualHandleAllExceptionsResult = retailExceptionHandler
+                .handleAllExceptions(new Exception("An error occurred"));
         assertEquals("Sorry something went wrong please try after sometime", actualHandleAllExceptionsResult.getBody());
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, actualHandleAllExceptionsResult.getStatusCode());
         assertTrue(actualHandleAllExceptionsResult.getHeaders().isEmpty());
     }
-
     /**
      * Method under test: {@link RetailExceptionHandler#generateClientResponse(ApiErrorCode, HttpStatus)}
      */
@@ -69,6 +70,7 @@ class RetailExceptionHandlerTest {
         ResponseEntity<List<Error>> actualGenerateClientResponseResult = (new RetailExceptionHandler())
                 .generateClientResponse(ApiErrorCode.INVALID_AMOUNT, HttpStatus.CONTINUE);
         List<Error> body = actualGenerateClientResponseResult.getBody();
+        assertEquals(1, body.size());
         assertTrue(actualGenerateClientResponseResult.hasBody());
         assertTrue(actualGenerateClientResponseResult.getHeaders().isEmpty());
         assertEquals(HttpStatus.CONTINUE, actualGenerateClientResponseResult.getStatusCode());
@@ -211,6 +213,23 @@ class RetailExceptionHandlerTest {
         Error getResult = body.get(0);
         assertEquals("RETAIL_REWARD_CODE_209", getResult.getErrorCode());
         assertEquals("Amount is Missing", getResult.getErrorDescription());
+    }
+
+    /**
+     * Method under test: {@link RetailExceptionHandler#generateClientResponse(ApiErrorCode, HttpStatus)}
+     */
+    @Test
+    void testGenerateClientResponse11() {
+        ResponseEntity<List<Error>> actualGenerateClientResponseResult = (new RetailExceptionHandler())
+                .generateClientResponse(ApiErrorCode.INVALID_PHONENUMBER_LENGTH, HttpStatus.CONTINUE);
+        List<Error> body = actualGenerateClientResponseResult.getBody();
+        assertEquals(1, body.size());
+        assertTrue(actualGenerateClientResponseResult.hasBody());
+        assertTrue(actualGenerateClientResponseResult.getHeaders().isEmpty());
+        assertEquals(HttpStatus.CONTINUE, actualGenerateClientResponseResult.getStatusCode());
+        Error getResult = body.get(0);
+        assertEquals("RETAIL_REWARD_CODE_210", getResult.getErrorCode());
+        assertEquals("Length of Phone Number should be more than 3 and less than 15", getResult.getErrorDescription());
     }
 }
 

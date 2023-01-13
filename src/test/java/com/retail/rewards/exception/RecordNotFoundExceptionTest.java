@@ -1,9 +1,9 @@
 package com.retail.rewards.exception;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.retail.rewards.model.ApiErrorCode;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RecordNotFoundExceptionTest {
     /**

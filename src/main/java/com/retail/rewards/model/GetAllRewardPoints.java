@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class GetAllRewardPoints {
 
-    public String phoneNumber;
-    public String rewardPoints;
+	public String phoneNumber;
+	public String rewardPoints;
 }

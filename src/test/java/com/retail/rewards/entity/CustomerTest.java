@@ -1,12 +1,17 @@
 package com.retail.rewards.entity;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 class CustomerTest {
     /**
@@ -262,10 +267,10 @@ class CustomerTest {
         customer.setTransactions(new HashSet<>());
 
         TransactionData transactionData = new TransactionData();
-        transactionData.setBillAmount(10.0d);
+        transactionData.setBillAmount(BigDecimal.valueOf(42L));
         transactionData.setCount(3L);
         transactionData.setCustomerId(customer);
-        transactionData.setRewardPoints(1L);
+        transactionData.setRewardPoints(BigDecimal.valueOf(42L));
         transactionData.setTransactionDate(LocalDate.ofEpochDay(1L));
         transactionData.setTransactionId(123L);
 

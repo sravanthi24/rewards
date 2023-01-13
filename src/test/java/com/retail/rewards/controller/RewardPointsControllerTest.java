@@ -14,6 +14,7 @@ import com.retail.rewards.model.GetAllRewardPoints;
 import com.retail.rewards.service.RewardPointsService;
 import com.retail.rewards.validator.RequestValidator;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -55,10 +56,10 @@ class RewardPointsControllerTest {
         customer.setTransactions(new HashSet<>());
 
         TransactionData transactionData = new TransactionData();
-        transactionData.setBillAmount(10.0d);
+        transactionData.setBillAmount(BigDecimal.valueOf(42L));
         transactionData.setCount(3L);
         transactionData.setCustomerId(customer);
-        transactionData.setRewardPoints(1L);
+        transactionData.setRewardPoints(BigDecimal.valueOf(42L));
         transactionData.setTransactionDate(LocalDate.ofEpochDay(1L));
         transactionData.setTransactionId(123L);
 
@@ -74,8 +75,8 @@ class RewardPointsControllerTest {
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.content()
                         .string(
-                                "[{\"customerId\":{\"name\":\"?\",\"phoneNumber\":\"4105551212\"},\"transactionDate\":[1970,1,2],\"billAmount\":10.0"
-                                        + ",\"rewardPoints\":1}]"));
+                                "[{\"customerId\":{\"name\":\"?\",\"phoneNumber\":\"4105551212\"},\"transactionDate\":[1970,1,2],\"billAmount\":42,"
+                                        + "\"rewardPoints\":42}]"));
     }
 
     /**
@@ -107,8 +108,6 @@ class RewardPointsControllerTest {
      */
     @Test
     void testCreateTransaction() throws Exception {
-        when(requestValidator.createRequestValidator((CreateTransactionRequest) any())).thenReturn(new ArrayList<>());
-
         Customer customer = new Customer();
         customer.setCustomerId(123L);
         customer.setName("Name");
@@ -116,16 +115,17 @@ class RewardPointsControllerTest {
         customer.setTransactions(new HashSet<>());
 
         TransactionData transactionData = new TransactionData();
-        transactionData.setBillAmount(10.0d);
+        transactionData.setBillAmount(BigDecimal.valueOf(42L));
         transactionData.setCount(3L);
         transactionData.setCustomerId(customer);
-        transactionData.setRewardPoints(1L);
+        transactionData.setRewardPoints(BigDecimal.valueOf(42L));
         transactionData.setTransactionDate(LocalDate.ofEpochDay(1L));
         transactionData.setTransactionId(123L);
         when(rewardPointsService.saveTransactionData((CreateTransactionRequest) any())).thenReturn(transactionData);
+        when(requestValidator.createRequestValidator((CreateTransactionRequest) any())).thenReturn(new ArrayList<>());
 
         CreateTransactionRequest createTransactionRequest = new CreateTransactionRequest();
-        createTransactionRequest.setBillAmount(10.0d);
+        createTransactionRequest.setBillAmount(BigDecimal.valueOf(42L));
         createTransactionRequest.setName("Name");
         createTransactionRequest.setPhoneNumber("4105551212");
         createTransactionRequest.setTransactionDate(null);
@@ -140,8 +140,8 @@ class RewardPointsControllerTest {
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.content()
                         .string(
-                                "{\"customerId\":{\"name\":\"Name\",\"phoneNumber\":\"4105551212\"},\"transactionDate\":[1970,1,2],\"billAmount\":10"
-                                        + ".0,\"rewardPoints\":1}"));
+                                "{\"customerId\":{\"name\":\"Name\",\"phoneNumber\":\"XXXXXXX212\"},\"transactionDate\":[1970,1,2],\"billAmount\":42"
+                                        + ",\"rewardPoints\":42}"));
     }
 
     /**
@@ -196,6 +196,62 @@ class RewardPointsControllerTest {
      */
     @Test
     void testCreateTransaction2() throws Exception {
+        Customer customer = new Customer();
+        customer.setCustomerId(123L);
+        customer.setName("Name");
+        customer.setPhoneNumber("");
+        customer.setTransactions(new HashSet<>());
+
+        TransactionData transactionData = new TransactionData();
+        transactionData.setBillAmount(BigDecimal.valueOf(42L));
+        transactionData.setCount(3L);
+        transactionData.setCustomerId(customer);
+        transactionData.setRewardPoints(BigDecimal.valueOf(42L));
+        transactionData.setTransactionDate(LocalDate.ofEpochDay(1L));
+        transactionData.setTransactionId(123L);
+        when(rewardPointsService.saveTransactionData((CreateTransactionRequest) any())).thenReturn(transactionData);
+        when(requestValidator.createRequestValidator((CreateTransactionRequest) any())).thenReturn(new ArrayList<>());
+
+        CreateTransactionRequest createTransactionRequest = new CreateTransactionRequest();
+        createTransactionRequest.setBillAmount(BigDecimal.valueOf(42L));
+        createTransactionRequest.setName("Name");
+        createTransactionRequest.setPhoneNumber("4105551212");
+        createTransactionRequest.setTransactionDate(null);
+        String content = (new ObjectMapper()).writeValueAsString(createTransactionRequest);
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/retail/transaction")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content);
+        ResultActions actualPerformResult = MockMvcBuilders.standaloneSetup(rewardPointsController)
+                .build()
+                .perform(requestBuilder);
+        actualPerformResult.andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+                .andExpect(MockMvcResultMatchers.content()
+                        .string(
+                                "{\"customerId\":{\"name\":\"Name\",\"phoneNumber\":\"\"},\"transactionDate\":[1970,1,2],\"billAmount\":42,\"rewardPoints"
+                                        + "\":42}"));
+    }
+
+    /**
+     * Method under test: {@link RewardPointsController#createTransaction(CreateTransactionRequest)}
+     */
+    @Test
+    void testCreateTransaction3() throws Exception {
+        Customer customer = new Customer();
+        customer.setCustomerId(123L);
+        customer.setName("Name");
+        customer.setPhoneNumber("4105551212");
+        customer.setTransactions(new HashSet<>());
+
+        TransactionData transactionData = new TransactionData();
+        transactionData.setBillAmount(BigDecimal.valueOf(42L));
+        transactionData.setCount(3L);
+        transactionData.setCustomerId(customer);
+        transactionData.setRewardPoints(BigDecimal.valueOf(42L));
+        transactionData.setTransactionDate(LocalDate.ofEpochDay(1L));
+        transactionData.setTransactionId(123L);
+        when(rewardPointsService.saveTransactionData((CreateTransactionRequest) any())).thenReturn(transactionData);
+
         Error error = new Error();
         error.setErrorCode("An error occurred");
         error.setErrorDescription("An error occurred");
@@ -204,23 +260,8 @@ class RewardPointsControllerTest {
         errorList.add(error);
         when(requestValidator.createRequestValidator((CreateTransactionRequest) any())).thenReturn(errorList);
 
-        Customer customer = new Customer();
-        customer.setCustomerId(123L);
-        customer.setName("Name");
-        customer.setPhoneNumber("4105551212");
-        customer.setTransactions(new HashSet<>());
-
-        TransactionData transactionData = new TransactionData();
-        transactionData.setBillAmount(10.0d);
-        transactionData.setCount(3L);
-        transactionData.setCustomerId(customer);
-        transactionData.setRewardPoints(1L);
-        transactionData.setTransactionDate(LocalDate.ofEpochDay(1L));
-        transactionData.setTransactionId(123L);
-        when(rewardPointsService.saveTransactionData((CreateTransactionRequest) any())).thenReturn(transactionData);
-
         CreateTransactionRequest createTransactionRequest = new CreateTransactionRequest();
-        createTransactionRequest.setBillAmount(10.0d);
+        createTransactionRequest.setBillAmount(BigDecimal.valueOf(42L));
         createTransactionRequest.setName("Name");
         createTransactionRequest.setPhoneNumber("4105551212");
         createTransactionRequest.setTransactionDate(null);
@@ -244,7 +285,7 @@ class RewardPointsControllerTest {
     void testGetDetailedCountOfRewardPointsByPhoneNumberAndMonth() throws Exception {
         DetailedRewardPointsResponse detailedRewardPointsResponse = new DetailedRewardPointsResponse();
         detailedRewardPointsResponse.setMonthlyRewardPoints(new ArrayList<>());
-        detailedRewardPointsResponse.setTotalRewards(1L);
+        detailedRewardPointsResponse.setTotalRewards(BigDecimal.valueOf(42L));
         when(rewardPointsService.getDetailedRewardPointsByMonth((String) any(), anyInt()))
                 .thenReturn(detailedRewardPointsResponse);
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
@@ -254,7 +295,7 @@ class RewardPointsControllerTest {
                 .perform(requestBuilder)
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
-                .andExpect(MockMvcResultMatchers.content().string("{\"totalRewards\":1,\"monthlyRewardPoints\":[]}"));
+                .andExpect(MockMvcResultMatchers.content().string("{\"totalRewards\":42,\"monthlyRewardPoints\":[]}"));
     }
 
     /**

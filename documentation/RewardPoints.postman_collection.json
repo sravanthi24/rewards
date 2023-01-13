@@ -1,0 +1,99 @@
+{
+	"info": {
+		"_postman_id": "de25fbca-4122-46a4-b884-380d81145c0c",
+		"name": "RewardPoints",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "CreateTransaction",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n     \"name\": \"Joe Montana\",\n     \"phoneNumber\": \"984567890\",\n     \"transactionDate\": \"2022-10-12\",\n     \"billAmount\": \"190\"\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/retail/transaction/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"retail",
+						"transaction",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetRewardPoints",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "GetRewardPointByPhoneMonth",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/retail/reward-points/984567891/3\n",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"retail",
+						"reward-points",
+						"984567891",
+						"3\n"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RewardPointsByPhone",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "TransactionRewardPointsByPhone",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/retail/reward-points/transaction/984567890",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"retail",
+						"reward-points",
+						"transaction",
+						"984567890"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

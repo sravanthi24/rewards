@@ -1,13 +1,20 @@
 package com.retail.rewards.entity;
 
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import org.junit.jupiter.api.Test;
 
 class TransactionDataTest {
     /**
@@ -32,10 +39,10 @@ class TransactionDataTest {
         customer.setTransactions(new HashSet<>());
 
         TransactionData transactionData1 = new TransactionData();
-        transactionData1.setBillAmount(10.0d);
+        transactionData1.setBillAmount(BigDecimal.valueOf(42L));
         transactionData1.setCount(3L);
         transactionData1.setCustomerId(customer);
-        transactionData1.setRewardPoints(3L);
+        transactionData1.setRewardPoints(BigDecimal.valueOf(42L));
         transactionData1.setTransactionDate(LocalDate.ofEpochDay(3L));
         transactionData1.setTransactionId(123L);
         assertTrue(transactionData.canEqual(transactionData1));
@@ -46,10 +53,10 @@ class TransactionDataTest {
      *
      * <ul>
      *   <li>default or parameterless constructor of {@link TransactionData}
-     *   <li>{@link TransactionData#setBillAmount(Double)}
+     *   <li>{@link TransactionData#setBillAmount(BigDecimal)}
      *   <li>{@link TransactionData#setCount(Long)}
      *   <li>{@link TransactionData#setCustomerId(Customer)}
-     *   <li>{@link TransactionData#setRewardPoints(Long)}
+     *   <li>{@link TransactionData#setRewardPoints(BigDecimal)}
      *   <li>{@link TransactionData#setTransactionDate(LocalDate)}
      *   <li>{@link TransactionData#setTransactionId(Long)}
      *   <li>{@link TransactionData#toString()}
@@ -64,7 +71,8 @@ class TransactionDataTest {
     @Test
     void testConstructor() {
         TransactionData actualTransactionData = new TransactionData();
-        actualTransactionData.setBillAmount(10.0d);
+        BigDecimal valueOfResult = BigDecimal.valueOf(42L);
+        actualTransactionData.setBillAmount(valueOfResult);
         actualTransactionData.setCount(3L);
         Customer customer = new Customer();
         customer.setCustomerId(123L);
@@ -72,20 +80,25 @@ class TransactionDataTest {
         customer.setPhoneNumber("4105551212");
         customer.setTransactions(new HashSet<>());
         actualTransactionData.setCustomerId(customer);
-        actualTransactionData.setRewardPoints(1L);
+        BigDecimal valueOfResult1 = BigDecimal.valueOf(42L);
+        actualTransactionData.setRewardPoints(valueOfResult1);
         LocalDate ofEpochDayResult = LocalDate.ofEpochDay(1L);
         actualTransactionData.setTransactionDate(ofEpochDayResult);
         actualTransactionData.setTransactionId(123L);
         String actualToStringResult = actualTransactionData.toString();
-        assertEquals(10.0d, actualTransactionData.getBillAmount().doubleValue());
+        BigDecimal billAmount = actualTransactionData.getBillAmount();
+        assertSame(valueOfResult, billAmount);
+        assertEquals(valueOfResult1, billAmount);
         assertEquals(3L, actualTransactionData.getCount().longValue());
         assertSame(customer, actualTransactionData.getCustomerId());
-        assertEquals(1L, actualTransactionData.getRewardPoints().longValue());
+        BigDecimal rewardPoints = actualTransactionData.getRewardPoints();
+        assertSame(valueOfResult1, rewardPoints);
+        assertEquals(billAmount, rewardPoints);
         assertSame(ofEpochDayResult, actualTransactionData.getTransactionDate());
         assertEquals(123L, actualTransactionData.getTransactionId().longValue());
         assertEquals(
                 "TransactionData(transactionId=123, customerId=Customer(customerId=123, name=Name, phoneNumber=4105551212,"
-                        + " transactions=[]), transactionDate=1970-01-02, billAmount=10.0, rewardPoints=1, count=3)",
+                        + " transactions=[]), transactionDate=1970-01-02, billAmount=42, rewardPoints=42, count=3)",
                 actualToStringResult);
     }
 
@@ -101,10 +114,10 @@ class TransactionDataTest {
         customer.setTransactions(new HashSet<>());
 
         TransactionData transactionData = new TransactionData();
-        transactionData.setBillAmount(10.0d);
+        transactionData.setBillAmount(BigDecimal.valueOf(42L));
         transactionData.setCount(3L);
         transactionData.setCustomerId(customer);
-        transactionData.setRewardPoints(1L);
+        transactionData.setRewardPoints(BigDecimal.valueOf(42L));
         transactionData.setTransactionDate(LocalDate.ofEpochDay(1L));
         transactionData.setTransactionId(123L);
         assertNotEquals(transactionData, null);
@@ -122,10 +135,10 @@ class TransactionDataTest {
         customer.setTransactions(new HashSet<>());
 
         TransactionData transactionData = new TransactionData();
-        transactionData.setBillAmount(10.0d);
+        transactionData.setBillAmount(BigDecimal.valueOf(42L));
         transactionData.setCount(3L);
         transactionData.setCustomerId(customer);
-        transactionData.setRewardPoints(1L);
+        transactionData.setRewardPoints(BigDecimal.valueOf(42L));
         transactionData.setTransactionDate(LocalDate.ofEpochDay(1L));
         transactionData.setTransactionId(123L);
         assertNotEquals(transactionData, "Different type to TransactionData");
@@ -148,10 +161,10 @@ class TransactionDataTest {
         customer.setTransactions(new HashSet<>());
 
         TransactionData transactionData = new TransactionData();
-        transactionData.setBillAmount(10.0d);
+        transactionData.setBillAmount(BigDecimal.valueOf(42L));
         transactionData.setCount(3L);
         transactionData.setCustomerId(customer);
-        transactionData.setRewardPoints(1L);
+        transactionData.setRewardPoints(BigDecimal.valueOf(42L));
         transactionData.setTransactionDate(LocalDate.ofEpochDay(1L));
         transactionData.setTransactionId(123L);
         assertEquals(transactionData, transactionData);
@@ -176,10 +189,10 @@ class TransactionDataTest {
         customer.setTransactions(new HashSet<>());
 
         TransactionData transactionData = new TransactionData();
-        transactionData.setBillAmount(10.0d);
+        transactionData.setBillAmount(BigDecimal.valueOf(42L));
         transactionData.setCount(3L);
         transactionData.setCustomerId(customer);
-        transactionData.setRewardPoints(1L);
+        transactionData.setRewardPoints(BigDecimal.valueOf(42L));
         transactionData.setTransactionDate(LocalDate.ofEpochDay(1L));
         transactionData.setTransactionId(123L);
 
@@ -190,10 +203,10 @@ class TransactionDataTest {
         customer1.setTransactions(new HashSet<>());
 
         TransactionData transactionData1 = new TransactionData();
-        transactionData1.setBillAmount(10.0d);
+        transactionData1.setBillAmount(BigDecimal.valueOf(42L));
         transactionData1.setCount(3L);
         transactionData1.setCustomerId(customer1);
-        transactionData1.setRewardPoints(1L);
+        transactionData1.setRewardPoints(BigDecimal.valueOf(42L));
         transactionData1.setTransactionDate(LocalDate.ofEpochDay(1L));
         transactionData1.setTransactionId(123L);
         assertEquals(transactionData, transactionData1);
@@ -213,10 +226,10 @@ class TransactionDataTest {
         customer.setTransactions(new HashSet<>());
 
         TransactionData transactionData = new TransactionData();
-        transactionData.setBillAmount(null);
+        transactionData.setBillAmount(BigDecimal.valueOf(1L));
         transactionData.setCount(3L);
         transactionData.setCustomerId(customer);
-        transactionData.setRewardPoints(1L);
+        transactionData.setRewardPoints(BigDecimal.valueOf(42L));
         transactionData.setTransactionDate(LocalDate.ofEpochDay(1L));
         transactionData.setTransactionId(123L);
 
@@ -227,10 +240,10 @@ class TransactionDataTest {
         customer1.setTransactions(new HashSet<>());
 
         TransactionData transactionData1 = new TransactionData();
-        transactionData1.setBillAmount(10.0d);
+        transactionData1.setBillAmount(BigDecimal.valueOf(42L));
         transactionData1.setCount(3L);
         transactionData1.setCustomerId(customer1);
-        transactionData1.setRewardPoints(1L);
+        transactionData1.setRewardPoints(BigDecimal.valueOf(42L));
         transactionData1.setTransactionDate(LocalDate.ofEpochDay(1L));
         transactionData1.setTransactionId(123L);
         assertNotEquals(transactionData, transactionData1);
@@ -248,10 +261,10 @@ class TransactionDataTest {
         customer.setTransactions(new HashSet<>());
 
         TransactionData transactionData = new TransactionData();
-        transactionData.setBillAmount(0.5d);
+        transactionData.setBillAmount(null);
         transactionData.setCount(3L);
         transactionData.setCustomerId(customer);
-        transactionData.setRewardPoints(1L);
+        transactionData.setRewardPoints(BigDecimal.valueOf(42L));
         transactionData.setTransactionDate(LocalDate.ofEpochDay(1L));
         transactionData.setTransactionId(123L);
 
@@ -262,10 +275,10 @@ class TransactionDataTest {
         customer1.setTransactions(new HashSet<>());
 
         TransactionData transactionData1 = new TransactionData();
-        transactionData1.setBillAmount(10.0d);
+        transactionData1.setBillAmount(BigDecimal.valueOf(42L));
         transactionData1.setCount(3L);
         transactionData1.setCustomerId(customer1);
-        transactionData1.setRewardPoints(1L);
+        transactionData1.setRewardPoints(BigDecimal.valueOf(42L));
         transactionData1.setTransactionDate(LocalDate.ofEpochDay(1L));
         transactionData1.setTransactionId(123L);
         assertNotEquals(transactionData, transactionData1);
@@ -283,10 +296,10 @@ class TransactionDataTest {
         customer.setTransactions(new HashSet<>());
 
         TransactionData transactionData = new TransactionData();
-        transactionData.setBillAmount(10.0d);
+        transactionData.setBillAmount(BigDecimal.valueOf(42L));
         transactionData.setCount(1L);
         transactionData.setCustomerId(customer);
-        transactionData.setRewardPoints(1L);
+        transactionData.setRewardPoints(BigDecimal.valueOf(42L));
         transactionData.setTransactionDate(LocalDate.ofEpochDay(1L));
         transactionData.setTransactionId(123L);
 
@@ -297,10 +310,10 @@ class TransactionDataTest {
         customer1.setTransactions(new HashSet<>());
 
         TransactionData transactionData1 = new TransactionData();
-        transactionData1.setBillAmount(10.0d);
+        transactionData1.setBillAmount(BigDecimal.valueOf(42L));
         transactionData1.setCount(3L);
         transactionData1.setCustomerId(customer1);
-        transactionData1.setRewardPoints(1L);
+        transactionData1.setRewardPoints(BigDecimal.valueOf(42L));
         transactionData1.setTransactionDate(LocalDate.ofEpochDay(1L));
         transactionData1.setTransactionId(123L);
         assertNotEquals(transactionData, transactionData1);
@@ -318,10 +331,10 @@ class TransactionDataTest {
         customer.setTransactions(new HashSet<>());
 
         TransactionData transactionData = new TransactionData();
-        transactionData.setBillAmount(10.0d);
+        transactionData.setBillAmount(BigDecimal.valueOf(42L));
         transactionData.setCount(null);
         transactionData.setCustomerId(customer);
-        transactionData.setRewardPoints(1L);
+        transactionData.setRewardPoints(BigDecimal.valueOf(42L));
         transactionData.setTransactionDate(LocalDate.ofEpochDay(1L));
         transactionData.setTransactionId(123L);
 
@@ -332,10 +345,10 @@ class TransactionDataTest {
         customer1.setTransactions(new HashSet<>());
 
         TransactionData transactionData1 = new TransactionData();
-        transactionData1.setBillAmount(10.0d);
+        transactionData1.setBillAmount(BigDecimal.valueOf(42L));
         transactionData1.setCount(3L);
         transactionData1.setCustomerId(customer1);
-        transactionData1.setRewardPoints(1L);
+        transactionData1.setRewardPoints(BigDecimal.valueOf(42L));
         transactionData1.setTransactionDate(LocalDate.ofEpochDay(1L));
         transactionData1.setTransactionId(123L);
         assertNotEquals(transactionData, transactionData1);
@@ -357,10 +370,10 @@ class TransactionDataTest {
         customer.setTransactions(new HashSet<>());
 
         TransactionData transactionData = new TransactionData();
-        transactionData.setBillAmount(10.0d);
+        transactionData.setBillAmount(BigDecimal.valueOf(42L));
         transactionData.setCount(3L);
         transactionData.setCustomerId(customer);
-        transactionData.setRewardPoints(1L);
+        transactionData.setRewardPoints(BigDecimal.valueOf(42L));
         transactionData.setTransactionDate(LocalDate.ofEpochDay(1L));
         transactionData.setTransactionId(123L);
 
@@ -371,10 +384,10 @@ class TransactionDataTest {
         customer1.setTransactions(new HashSet<>());
 
         TransactionData transactionData1 = new TransactionData();
-        transactionData1.setBillAmount(10.0d);
+        transactionData1.setBillAmount(BigDecimal.valueOf(42L));
         transactionData1.setCount(3L);
         transactionData1.setCustomerId(customer1);
-        transactionData1.setRewardPoints(1L);
+        transactionData1.setRewardPoints(BigDecimal.valueOf(42L));
         transactionData1.setTransactionDate(LocalDate.ofEpochDay(1L));
         transactionData1.setTransactionId(123L);
         assertNotEquals(transactionData, transactionData1);
@@ -396,12 +409,12 @@ class TransactionDataTest {
         customer.setTransactions(new HashSet<>());
 
         TransactionData transactionData = new TransactionData();
-        transactionData.setBillAmount(10.0d);
+        transactionData.setBillAmount(BigDecimal.valueOf(42L));
         transactionData.setCount(3L);
         transactionData.setCustomerId(customer);
-        transactionData.setRewardPoints(3L);
+        transactionData.setRewardPoints(BigDecimal.valueOf(42L));
         transactionData.setTransactionDate(LocalDate.ofEpochDay(1L));
-        transactionData.setTransactionId(123L);
+        transactionData.setTransactionId(1L);
 
         Customer customer1 = new Customer();
         customer1.setCustomerId(123L);
@@ -410,10 +423,10 @@ class TransactionDataTest {
         customer1.setTransactions(new HashSet<>());
 
         TransactionData transactionData1 = new TransactionData();
-        transactionData1.setBillAmount(10.0d);
+        transactionData1.setBillAmount(BigDecimal.valueOf(42L));
         transactionData1.setCount(3L);
         transactionData1.setCustomerId(customer1);
-        transactionData1.setRewardPoints(1L);
+        transactionData1.setRewardPoints(BigDecimal.valueOf(42L));
         transactionData1.setTransactionDate(LocalDate.ofEpochDay(1L));
         transactionData1.setTransactionId(123L);
         assertNotEquals(transactionData, transactionData1);
@@ -435,12 +448,12 @@ class TransactionDataTest {
         customer.setTransactions(new HashSet<>());
 
         TransactionData transactionData = new TransactionData();
-        transactionData.setBillAmount(10.0d);
+        transactionData.setBillAmount(BigDecimal.valueOf(42L));
         transactionData.setCount(3L);
         transactionData.setCustomerId(customer);
-        transactionData.setRewardPoints(null);
+        transactionData.setRewardPoints(BigDecimal.valueOf(42L));
         transactionData.setTransactionDate(LocalDate.ofEpochDay(1L));
-        transactionData.setTransactionId(123L);
+        transactionData.setTransactionId(null);
 
         Customer customer1 = new Customer();
         customer1.setCustomerId(123L);
@@ -449,10 +462,10 @@ class TransactionDataTest {
         customer1.setTransactions(new HashSet<>());
 
         TransactionData transactionData1 = new TransactionData();
-        transactionData1.setBillAmount(10.0d);
+        transactionData1.setBillAmount(BigDecimal.valueOf(42L));
         transactionData1.setCount(3L);
         transactionData1.setCustomerId(customer1);
-        transactionData1.setRewardPoints(1L);
+        transactionData1.setRewardPoints(BigDecimal.valueOf(42L));
         transactionData1.setTransactionDate(LocalDate.ofEpochDay(1L));
         transactionData1.setTransactionId(123L);
         assertNotEquals(transactionData, transactionData1);
@@ -474,49 +487,10 @@ class TransactionDataTest {
         customer.setTransactions(new HashSet<>());
 
         TransactionData transactionData = new TransactionData();
-        transactionData.setBillAmount(10.0d);
+        transactionData.setBillAmount(BigDecimal.valueOf(42L));
         transactionData.setCount(3L);
         transactionData.setCustomerId(customer);
-        transactionData.setRewardPoints(1L);
-        transactionData.setTransactionDate(LocalDate.ofEpochDay(1L));
-        transactionData.setTransactionId(1L);
-
-        Customer customer1 = new Customer();
-        customer1.setCustomerId(123L);
-        customer1.setName("Name");
-        customer1.setPhoneNumber("4105551212");
-        customer1.setTransactions(new HashSet<>());
-
-        TransactionData transactionData1 = new TransactionData();
-        transactionData1.setBillAmount(10.0d);
-        transactionData1.setCount(3L);
-        transactionData1.setCustomerId(customer1);
-        transactionData1.setRewardPoints(1L);
-        transactionData1.setTransactionDate(LocalDate.ofEpochDay(1L));
-        transactionData1.setTransactionId(123L);
-        assertNotEquals(transactionData, transactionData1);
-    }
-
-    /**
-     * Method under test: {@link TransactionData#equals(Object)}
-     */
-    @Test
-    void testEquals13() {
-        Customer customer = mock(Customer.class);
-        doNothing().when(customer).setCustomerId((Long) any());
-        doNothing().when(customer).setName((String) any());
-        doNothing().when(customer).setPhoneNumber((String) any());
-        doNothing().when(customer).setTransactions((Set<TransactionData>) any());
-        customer.setCustomerId(123L);
-        customer.setName("Name");
-        customer.setPhoneNumber("4105551212");
-        customer.setTransactions(new HashSet<>());
-
-        TransactionData transactionData = new TransactionData();
-        transactionData.setBillAmount(10.0d);
-        transactionData.setCount(3L);
-        transactionData.setCustomerId(customer);
-        transactionData.setRewardPoints(1L);
+        transactionData.setRewardPoints(BigDecimal.valueOf(42L));
         transactionData.setTransactionDate(LocalDate.ofEpochDay(1L));
         transactionData.setTransactionId(null);
 
@@ -527,88 +501,10 @@ class TransactionDataTest {
         customer1.setTransactions(new HashSet<>());
 
         TransactionData transactionData1 = new TransactionData();
-        transactionData1.setBillAmount(10.0d);
+        transactionData1.setBillAmount(BigDecimal.valueOf(42L));
         transactionData1.setCount(3L);
         transactionData1.setCustomerId(customer1);
-        transactionData1.setRewardPoints(1L);
-        transactionData1.setTransactionDate(LocalDate.ofEpochDay(1L));
-        transactionData1.setTransactionId(123L);
-        assertNotEquals(transactionData, transactionData1);
-    }
-
-    /**
-     * Method under test: {@link TransactionData#equals(Object)}
-     */
-    @Test
-    void testEquals14() {
-        Customer customer = mock(Customer.class);
-        doNothing().when(customer).setCustomerId((Long) any());
-        doNothing().when(customer).setName((String) any());
-        doNothing().when(customer).setPhoneNumber((String) any());
-        doNothing().when(customer).setTransactions((Set<TransactionData>) any());
-        customer.setCustomerId(123L);
-        customer.setName("Name");
-        customer.setPhoneNumber("4105551212");
-        customer.setTransactions(new HashSet<>());
-
-        TransactionData transactionData = new TransactionData();
-        transactionData.setBillAmount(10.0d);
-        transactionData.setCount(3L);
-        transactionData.setCustomerId(customer);
-        transactionData.setRewardPoints(null);
-        transactionData.setTransactionDate(LocalDate.ofEpochDay(1L));
-        transactionData.setTransactionId(123L);
-
-        Customer customer1 = new Customer();
-        customer1.setCustomerId(123L);
-        customer1.setName("Name");
-        customer1.setPhoneNumber("4105551212");
-        customer1.setTransactions(new HashSet<>());
-
-        TransactionData transactionData1 = new TransactionData();
-        transactionData1.setBillAmount(10.0d);
-        transactionData1.setCount(3L);
-        transactionData1.setCustomerId(customer1);
-        transactionData1.setRewardPoints(null);
-        transactionData1.setTransactionDate(LocalDate.ofEpochDay(1L));
-        transactionData1.setTransactionId(123L);
-        assertNotEquals(transactionData, transactionData1);
-    }
-
-    /**
-     * Method under test: {@link TransactionData#equals(Object)}
-     */
-    @Test
-    void testEquals15() {
-        Customer customer = mock(Customer.class);
-        doNothing().when(customer).setCustomerId((Long) any());
-        doNothing().when(customer).setName((String) any());
-        doNothing().when(customer).setPhoneNumber((String) any());
-        doNothing().when(customer).setTransactions((Set<TransactionData>) any());
-        customer.setCustomerId(123L);
-        customer.setName("Name");
-        customer.setPhoneNumber("4105551212");
-        customer.setTransactions(new HashSet<>());
-
-        TransactionData transactionData = new TransactionData();
-        transactionData.setBillAmount(10.0d);
-        transactionData.setCount(3L);
-        transactionData.setCustomerId(customer);
-        transactionData.setRewardPoints(1L);
-        transactionData.setTransactionDate(LocalDate.ofEpochDay(1L));
-        transactionData.setTransactionId(null);
-
-        Customer customer1 = new Customer();
-        customer1.setCustomerId(123L);
-        customer1.setName("Name");
-        customer1.setPhoneNumber("4105551212");
-        customer1.setTransactions(new HashSet<>());
-
-        TransactionData transactionData1 = new TransactionData();
-        transactionData1.setBillAmount(10.0d);
-        transactionData1.setCount(3L);
-        transactionData1.setCustomerId(customer1);
-        transactionData1.setRewardPoints(1L);
+        transactionData1.setRewardPoints(BigDecimal.valueOf(42L));
         transactionData1.setTransactionDate(LocalDate.ofEpochDay(1L));
         transactionData1.setTransactionId(null);
         assertNotEquals(transactionData, transactionData1);

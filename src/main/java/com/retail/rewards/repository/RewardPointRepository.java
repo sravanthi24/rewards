@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface RewardPointRepository extends JpaRepository<RewardPoint, Long> {
 
-    List<RewardPoint> findAll();
+	List<RewardPoint> findAllByOrderByAmountLimitDesc();
 }

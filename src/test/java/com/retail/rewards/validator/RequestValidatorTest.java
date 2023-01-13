@@ -1,20 +1,26 @@
 package com.retail.rewards.validator;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.retail.rewards.model.CreateTransactionRequest;
 import com.retail.rewards.model.Error;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {RequestValidator.class})
 @ExtendWith(SpringExtension.class)
@@ -28,7 +34,7 @@ class RequestValidatorTest {
     @Test
     void testCreateRequestValidator() {
         CreateTransactionRequest createTransactionRequest = new CreateTransactionRequest();
-        createTransactionRequest.setBillAmount(10.0d);
+        createTransactionRequest.setBillAmount(BigDecimal.valueOf(42L));
         createTransactionRequest.setName("Name");
         createTransactionRequest.setPhoneNumber("4105551212");
         createTransactionRequest.setTransactionDate(LocalDate.ofEpochDay(1L));
@@ -41,24 +47,24 @@ class RequestValidatorTest {
     @Test
     void testCreateRequestValidator2() {
         CreateTransactionRequest createTransactionRequest = mock(CreateTransactionRequest.class);
-        when(createTransactionRequest.getBillAmount()).thenReturn(10.0d);
         when(createTransactionRequest.getName()).thenReturn("Name");
         when(createTransactionRequest.getPhoneNumber()).thenReturn("4105551212");
+        when(createTransactionRequest.getBillAmount()).thenReturn(BigDecimal.valueOf(42L));
         when(createTransactionRequest.getTransactionDate()).thenReturn(LocalDate.ofEpochDay(1L));
-        doNothing().when(createTransactionRequest).setBillAmount((Double) any());
+        doNothing().when(createTransactionRequest).setBillAmount((BigDecimal) any());
         doNothing().when(createTransactionRequest).setName((String) any());
         doNothing().when(createTransactionRequest).setPhoneNumber((String) any());
         doNothing().when(createTransactionRequest).setTransactionDate((LocalDate) any());
-        createTransactionRequest.setBillAmount(10.0d);
+        createTransactionRequest.setBillAmount(BigDecimal.valueOf(42L));
         createTransactionRequest.setName("Name");
         createTransactionRequest.setPhoneNumber("4105551212");
         createTransactionRequest.setTransactionDate(LocalDate.ofEpochDay(1L));
         assertTrue(requestValidator.createRequestValidator(createTransactionRequest).isEmpty());
-        verify(createTransactionRequest).getBillAmount();
         verify(createTransactionRequest).getName();
         verify(createTransactionRequest).getPhoneNumber();
+        verify(createTransactionRequest).getBillAmount();
         verify(createTransactionRequest).getTransactionDate();
-        verify(createTransactionRequest).setBillAmount((Double) any());
+        verify(createTransactionRequest).setBillAmount((BigDecimal) any());
         verify(createTransactionRequest).setName((String) any());
         verify(createTransactionRequest).setPhoneNumber((String) any());
         verify(createTransactionRequest).setTransactionDate((LocalDate) any());
@@ -70,15 +76,15 @@ class RequestValidatorTest {
     @Test
     void testCreateRequestValidator3() {
         CreateTransactionRequest createTransactionRequest = mock(CreateTransactionRequest.class);
-        when(createTransactionRequest.getBillAmount()).thenReturn(null);
-        when(createTransactionRequest.getName()).thenReturn("Name");
+        when(createTransactionRequest.getName()).thenReturn(null);
         when(createTransactionRequest.getPhoneNumber()).thenReturn("4105551212");
+        when(createTransactionRequest.getBillAmount()).thenReturn(BigDecimal.valueOf(42L));
         when(createTransactionRequest.getTransactionDate()).thenReturn(LocalDate.ofEpochDay(1L));
-        doNothing().when(createTransactionRequest).setBillAmount((Double) any());
+        doNothing().when(createTransactionRequest).setBillAmount((BigDecimal) any());
         doNothing().when(createTransactionRequest).setName((String) any());
         doNothing().when(createTransactionRequest).setPhoneNumber((String) any());
         doNothing().when(createTransactionRequest).setTransactionDate((LocalDate) any());
-        createTransactionRequest.setBillAmount(10.0d);
+        createTransactionRequest.setBillAmount(BigDecimal.valueOf(42L));
         createTransactionRequest.setName("Name");
         createTransactionRequest.setPhoneNumber("4105551212");
         createTransactionRequest.setTransactionDate(LocalDate.ofEpochDay(1L));
@@ -86,13 +92,13 @@ class RequestValidatorTest {
                 .createRequestValidator(createTransactionRequest);
         assertEquals(1, actualCreateRequestValidatorResult.size());
         Error getResult = actualCreateRequestValidatorResult.get(0);
-        assertEquals("RETAIL_REWARD_CODE_209", getResult.getErrorCode());
-        assertEquals("Amount is Missing", getResult.getErrorDescription());
-        verify(createTransactionRequest).getBillAmount();
+        assertEquals("RETAIL_REWARD_CODE_202", getResult.getErrorCode());
+        assertEquals("Name is Missing", getResult.getErrorDescription());
         verify(createTransactionRequest).getName();
         verify(createTransactionRequest).getPhoneNumber();
+        verify(createTransactionRequest).getBillAmount();
         verify(createTransactionRequest).getTransactionDate();
-        verify(createTransactionRequest).setBillAmount((Double) any());
+        verify(createTransactionRequest).setBillAmount((BigDecimal) any());
         verify(createTransactionRequest).setName((String) any());
         verify(createTransactionRequest).setPhoneNumber((String) any());
         verify(createTransactionRequest).setTransactionDate((LocalDate) any());
@@ -104,29 +110,24 @@ class RequestValidatorTest {
     @Test
     void testCreateRequestValidator4() {
         CreateTransactionRequest createTransactionRequest = mock(CreateTransactionRequest.class);
-        when(createTransactionRequest.getBillAmount()).thenReturn(10.0d);
-        when(createTransactionRequest.getName()).thenReturn(null);
-        when(createTransactionRequest.getPhoneNumber()).thenReturn("4105551212");
+        when(createTransactionRequest.getName()).thenReturn("Name");
+        when(createTransactionRequest.getPhoneNumber()).thenReturn("9");
+        when(createTransactionRequest.getBillAmount()).thenReturn(BigDecimal.valueOf(42L));
         when(createTransactionRequest.getTransactionDate()).thenReturn(LocalDate.ofEpochDay(1L));
-        doNothing().when(createTransactionRequest).setBillAmount((Double) any());
+        doNothing().when(createTransactionRequest).setBillAmount((BigDecimal) any());
         doNothing().when(createTransactionRequest).setName((String) any());
         doNothing().when(createTransactionRequest).setPhoneNumber((String) any());
         doNothing().when(createTransactionRequest).setTransactionDate((LocalDate) any());
-        createTransactionRequest.setBillAmount(10.0d);
+        createTransactionRequest.setBillAmount(BigDecimal.valueOf(42L));
         createTransactionRequest.setName("Name");
         createTransactionRequest.setPhoneNumber("4105551212");
         createTransactionRequest.setTransactionDate(LocalDate.ofEpochDay(1L));
-        List<Error> actualCreateRequestValidatorResult = requestValidator
-                .createRequestValidator(createTransactionRequest);
-        assertEquals(1, actualCreateRequestValidatorResult.size());
-        Error getResult = actualCreateRequestValidatorResult.get(0);
-        assertEquals("RETAIL_REWARD_CODE_202", getResult.getErrorCode());
-        assertEquals("Name is Missing", getResult.getErrorDescription());
-        verify(createTransactionRequest).getBillAmount();
+        assertTrue(requestValidator.createRequestValidator(createTransactionRequest).isEmpty());
         verify(createTransactionRequest).getName();
         verify(createTransactionRequest).getPhoneNumber();
+        verify(createTransactionRequest).getBillAmount();
         verify(createTransactionRequest).getTransactionDate();
-        verify(createTransactionRequest).setBillAmount((Double) any());
+        verify(createTransactionRequest).setBillAmount((BigDecimal) any());
         verify(createTransactionRequest).setName((String) any());
         verify(createTransactionRequest).setPhoneNumber((String) any());
         verify(createTransactionRequest).setTransactionDate((LocalDate) any());
@@ -138,24 +139,29 @@ class RequestValidatorTest {
     @Test
     void testCreateRequestValidator5() {
         CreateTransactionRequest createTransactionRequest = mock(CreateTransactionRequest.class);
-        when(createTransactionRequest.getBillAmount()).thenReturn(10.0d);
         when(createTransactionRequest.getName()).thenReturn("Name");
-        when(createTransactionRequest.getPhoneNumber()).thenReturn("9");
+        when(createTransactionRequest.getPhoneNumber()).thenReturn("[0-9]+");
+        when(createTransactionRequest.getBillAmount()).thenReturn(BigDecimal.valueOf(42L));
         when(createTransactionRequest.getTransactionDate()).thenReturn(LocalDate.ofEpochDay(1L));
-        doNothing().when(createTransactionRequest).setBillAmount((Double) any());
+        doNothing().when(createTransactionRequest).setBillAmount((BigDecimal) any());
         doNothing().when(createTransactionRequest).setName((String) any());
         doNothing().when(createTransactionRequest).setPhoneNumber((String) any());
         doNothing().when(createTransactionRequest).setTransactionDate((LocalDate) any());
-        createTransactionRequest.setBillAmount(10.0d);
+        createTransactionRequest.setBillAmount(BigDecimal.valueOf(42L));
         createTransactionRequest.setName("Name");
         createTransactionRequest.setPhoneNumber("4105551212");
         createTransactionRequest.setTransactionDate(LocalDate.ofEpochDay(1L));
-        assertTrue(requestValidator.createRequestValidator(createTransactionRequest).isEmpty());
-        verify(createTransactionRequest).getBillAmount();
+        List<Error> actualCreateRequestValidatorResult = requestValidator
+                .createRequestValidator(createTransactionRequest);
+        assertEquals(1, actualCreateRequestValidatorResult.size());
+        Error getResult = actualCreateRequestValidatorResult.get(0);
+        assertEquals("RETAIL_REWARD_CODE_201", getResult.getErrorCode());
+        assertEquals("Invalid Phone Number", getResult.getErrorDescription());
         verify(createTransactionRequest).getName();
         verify(createTransactionRequest).getPhoneNumber();
+        verify(createTransactionRequest).getBillAmount();
         verify(createTransactionRequest).getTransactionDate();
-        verify(createTransactionRequest).setBillAmount((Double) any());
+        verify(createTransactionRequest).setBillAmount((BigDecimal) any());
         verify(createTransactionRequest).setName((String) any());
         verify(createTransactionRequest).setPhoneNumber((String) any());
         verify(createTransactionRequest).setTransactionDate((LocalDate) any());
@@ -167,15 +173,15 @@ class RequestValidatorTest {
     @Test
     void testCreateRequestValidator6() {
         CreateTransactionRequest createTransactionRequest = mock(CreateTransactionRequest.class);
-        when(createTransactionRequest.getBillAmount()).thenReturn(10.0d);
         when(createTransactionRequest.getName()).thenReturn("Name");
-        when(createTransactionRequest.getPhoneNumber()).thenReturn("[0-9]+");
+        when(createTransactionRequest.getPhoneNumber()).thenReturn(null);
+        when(createTransactionRequest.getBillAmount()).thenReturn(BigDecimal.valueOf(42L));
         when(createTransactionRequest.getTransactionDate()).thenReturn(LocalDate.ofEpochDay(1L));
-        doNothing().when(createTransactionRequest).setBillAmount((Double) any());
+        doNothing().when(createTransactionRequest).setBillAmount((BigDecimal) any());
         doNothing().when(createTransactionRequest).setName((String) any());
         doNothing().when(createTransactionRequest).setPhoneNumber((String) any());
         doNothing().when(createTransactionRequest).setTransactionDate((LocalDate) any());
-        createTransactionRequest.setBillAmount(10.0d);
+        createTransactionRequest.setBillAmount(BigDecimal.valueOf(42L));
         createTransactionRequest.setName("Name");
         createTransactionRequest.setPhoneNumber("4105551212");
         createTransactionRequest.setTransactionDate(LocalDate.ofEpochDay(1L));
@@ -183,13 +189,13 @@ class RequestValidatorTest {
                 .createRequestValidator(createTransactionRequest);
         assertEquals(1, actualCreateRequestValidatorResult.size());
         Error getResult = actualCreateRequestValidatorResult.get(0);
-        assertEquals("RETAIL_REWARD_CODE_201", getResult.getErrorCode());
-        assertEquals("Invalid Phone Number", getResult.getErrorDescription());
-        verify(createTransactionRequest).getBillAmount();
+        assertEquals("RETAIL_REWARD_CODE_208", getResult.getErrorCode());
+        assertEquals("Phone Number is Missing", getResult.getErrorDescription());
         verify(createTransactionRequest).getName();
         verify(createTransactionRequest).getPhoneNumber();
+        verify(createTransactionRequest).getBillAmount();
         verify(createTransactionRequest).getTransactionDate();
-        verify(createTransactionRequest).setBillAmount((Double) any());
+        verify(createTransactionRequest).setBillAmount((BigDecimal) any());
         verify(createTransactionRequest).setName((String) any());
         verify(createTransactionRequest).setPhoneNumber((String) any());
         verify(createTransactionRequest).setTransactionDate((LocalDate) any());
@@ -201,29 +207,24 @@ class RequestValidatorTest {
     @Test
     void testCreateRequestValidator7() {
         CreateTransactionRequest createTransactionRequest = mock(CreateTransactionRequest.class);
-        when(createTransactionRequest.getBillAmount()).thenReturn(10.0d);
         when(createTransactionRequest.getName()).thenReturn("Name");
-        when(createTransactionRequest.getPhoneNumber()).thenReturn(null);
+        when(createTransactionRequest.getPhoneNumber()).thenReturn("42");
+        when(createTransactionRequest.getBillAmount()).thenReturn(BigDecimal.valueOf(42L));
         when(createTransactionRequest.getTransactionDate()).thenReturn(LocalDate.ofEpochDay(1L));
-        doNothing().when(createTransactionRequest).setBillAmount((Double) any());
+        doNothing().when(createTransactionRequest).setBillAmount((BigDecimal) any());
         doNothing().when(createTransactionRequest).setName((String) any());
         doNothing().when(createTransactionRequest).setPhoneNumber((String) any());
         doNothing().when(createTransactionRequest).setTransactionDate((LocalDate) any());
-        createTransactionRequest.setBillAmount(10.0d);
+        createTransactionRequest.setBillAmount(BigDecimal.valueOf(42L));
         createTransactionRequest.setName("Name");
         createTransactionRequest.setPhoneNumber("4105551212");
         createTransactionRequest.setTransactionDate(LocalDate.ofEpochDay(1L));
-        List<Error> actualCreateRequestValidatorResult = requestValidator
-                .createRequestValidator(createTransactionRequest);
-        assertEquals(1, actualCreateRequestValidatorResult.size());
-        Error getResult = actualCreateRequestValidatorResult.get(0);
-        assertEquals("RETAIL_REWARD_CODE_208", getResult.getErrorCode());
-        assertEquals("Phone Number is Missing", getResult.getErrorDescription());
-        verify(createTransactionRequest).getBillAmount();
+        assertTrue(requestValidator.createRequestValidator(createTransactionRequest).isEmpty());
         verify(createTransactionRequest).getName();
         verify(createTransactionRequest).getPhoneNumber();
+        verify(createTransactionRequest).getBillAmount();
         verify(createTransactionRequest).getTransactionDate();
-        verify(createTransactionRequest).setBillAmount((Double) any());
+        verify(createTransactionRequest).setBillAmount((BigDecimal) any());
         verify(createTransactionRequest).setName((String) any());
         verify(createTransactionRequest).setPhoneNumber((String) any());
         verify(createTransactionRequest).setTransactionDate((LocalDate) any());
@@ -235,24 +236,29 @@ class RequestValidatorTest {
     @Test
     void testCreateRequestValidator8() {
         CreateTransactionRequest createTransactionRequest = mock(CreateTransactionRequest.class);
-        when(createTransactionRequest.getBillAmount()).thenReturn(10.0d);
         when(createTransactionRequest.getName()).thenReturn("Name");
-        when(createTransactionRequest.getPhoneNumber()).thenReturn("42");
+        when(createTransactionRequest.getPhoneNumber()).thenReturn("4105551212");
+        when(createTransactionRequest.getBillAmount()).thenReturn(null);
         when(createTransactionRequest.getTransactionDate()).thenReturn(LocalDate.ofEpochDay(1L));
-        doNothing().when(createTransactionRequest).setBillAmount((Double) any());
+        doNothing().when(createTransactionRequest).setBillAmount((BigDecimal) any());
         doNothing().when(createTransactionRequest).setName((String) any());
         doNothing().when(createTransactionRequest).setPhoneNumber((String) any());
         doNothing().when(createTransactionRequest).setTransactionDate((LocalDate) any());
-        createTransactionRequest.setBillAmount(10.0d);
+        createTransactionRequest.setBillAmount(BigDecimal.valueOf(42L));
         createTransactionRequest.setName("Name");
         createTransactionRequest.setPhoneNumber("4105551212");
         createTransactionRequest.setTransactionDate(LocalDate.ofEpochDay(1L));
-        assertTrue(requestValidator.createRequestValidator(createTransactionRequest).isEmpty());
-        verify(createTransactionRequest).getBillAmount();
+        List<Error> actualCreateRequestValidatorResult = requestValidator
+                .createRequestValidator(createTransactionRequest);
+        assertEquals(1, actualCreateRequestValidatorResult.size());
+        Error getResult = actualCreateRequestValidatorResult.get(0);
+        assertEquals("RETAIL_REWARD_CODE_209", getResult.getErrorCode());
+        assertEquals("Amount is Missing", getResult.getErrorDescription());
         verify(createTransactionRequest).getName();
         verify(createTransactionRequest).getPhoneNumber();
+        verify(createTransactionRequest).getBillAmount();
         verify(createTransactionRequest).getTransactionDate();
-        verify(createTransactionRequest).setBillAmount((Double) any());
+        verify(createTransactionRequest).setBillAmount((BigDecimal) any());
         verify(createTransactionRequest).setName((String) any());
         verify(createTransactionRequest).setPhoneNumber((String) any());
         verify(createTransactionRequest).setTransactionDate((LocalDate) any());
@@ -264,15 +270,15 @@ class RequestValidatorTest {
     @Test
     void testCreateRequestValidator9() {
         CreateTransactionRequest createTransactionRequest = mock(CreateTransactionRequest.class);
-        when(createTransactionRequest.getBillAmount()).thenReturn(10.0d);
         when(createTransactionRequest.getName()).thenReturn("Name");
         when(createTransactionRequest.getPhoneNumber()).thenReturn("4105551212");
+        when(createTransactionRequest.getBillAmount()).thenReturn(BigDecimal.valueOf(42L));
         when(createTransactionRequest.getTransactionDate()).thenReturn(null);
-        doNothing().when(createTransactionRequest).setBillAmount((Double) any());
+        doNothing().when(createTransactionRequest).setBillAmount((BigDecimal) any());
         doNothing().when(createTransactionRequest).setName((String) any());
         doNothing().when(createTransactionRequest).setPhoneNumber((String) any());
         doNothing().when(createTransactionRequest).setTransactionDate((LocalDate) any());
-        createTransactionRequest.setBillAmount(10.0d);
+        createTransactionRequest.setBillAmount(BigDecimal.valueOf(42L));
         createTransactionRequest.setName("Name");
         createTransactionRequest.setPhoneNumber("4105551212");
         createTransactionRequest.setTransactionDate(LocalDate.ofEpochDay(1L));
@@ -282,11 +288,11 @@ class RequestValidatorTest {
         Error getResult = actualCreateRequestValidatorResult.get(0);
         assertEquals("RETAIL_REWARD_CODE_204", getResult.getErrorCode());
         assertEquals("Transaction Date is Missing", getResult.getErrorDescription());
-        verify(createTransactionRequest).getBillAmount();
         verify(createTransactionRequest).getName();
         verify(createTransactionRequest).getPhoneNumber();
+        verify(createTransactionRequest).getBillAmount();
         verify(createTransactionRequest).getTransactionDate();
-        verify(createTransactionRequest).setBillAmount((Double) any());
+        verify(createTransactionRequest).setBillAmount((BigDecimal) any());
         verify(createTransactionRequest).setName((String) any());
         verify(createTransactionRequest).setPhoneNumber((String) any());
         verify(createTransactionRequest).setTransactionDate((LocalDate) any());
@@ -367,22 +373,23 @@ class RequestValidatorTest {
     }
 
     /**
-     * Method under test: {@link RequestValidator#validateTransactionAmount(Double, List)}
+     * Method under test: {@link RequestValidator#validateTransactionAmount(BigDecimal, List)}
      */
     @Test
     void testValidateTransactionAmount() {
         // TODO: Complete this test.
         //   Reason: R004 No meaningful assertions found.
         //   Diffblue Cover was unable to create an assertion.
-        //   Make sure that fields modified by validateTransactionAmount(Double, List)
+        //   Make sure that fields modified by validateTransactionAmount(BigDecimal, List)
         //   have package-private, protected, or public getters.
         //   See https://diff.blue/R004 to resolve this issue.
 
-        requestValidator.validateTransactionAmount(10.0d, new ArrayList<>());
+        BigDecimal amount = BigDecimal.valueOf(42L);
+        requestValidator.validateTransactionAmount(amount, new ArrayList<>());
     }
 
     /**
-     * Method under test: {@link RequestValidator#validateTransactionAmount(Double, List)}
+     * Method under test: {@link RequestValidator#validateTransactionAmount(BigDecimal, List)}
      */
     @Test
     void testValidateTransactionAmount2() {
@@ -395,10 +402,11 @@ class RequestValidatorTest {
     }
 
     /**
-     * Method under test: {@link RequestValidator#validateTransactionAmount(Double, List)}
+     * Method under test: {@link RequestValidator#validateTransactionAmount(BigDecimal, List)}
      */
     @Test
     void testValidateTransactionAmount3() {
+        BigDecimal amount = BigDecimal.valueOf(42L);
         Error error = mock(Error.class);
         doNothing().when(error).setErrorCode((String) any());
         doNothing().when(error).setErrorDescription((String) any());
@@ -407,7 +415,7 @@ class RequestValidatorTest {
 
         ArrayList<Error> errorList = new ArrayList<>();
         errorList.add(error);
-        requestValidator.validateTransactionAmount(10.0d, errorList);
+        requestValidator.validateTransactionAmount(amount, errorList);
         verify(error).setErrorCode((String) any());
         verify(error).setErrorDescription((String) any());
     }

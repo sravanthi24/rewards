@@ -10,18 +10,16 @@ import java.util.List;
 
 public interface RewardPointsService {
 
-     Customer getCustomerDetails(String phoneNumber);
+	Customer getCustomerDetails(String phoneNumber);
 
-     List<TransactionData> getTransactionDataByPhoneNumber(String phoneNumber);
+	List<TransactionData> getTransactionDataByPhoneNumber(String phoneNumber);
 
-     TransactionData saveTransactionData(CreateTransactionRequest request);
+	TransactionData saveTransactionData(CreateTransactionRequest request);
 
-     List<GetAllRewardPoints> getRewardPointsForAllCustomer();
+	List<GetAllRewardPoints> getRewardPointsForAllCustomer();
 
-     List<GetAllRewardPoints> getCountOfRewardPointsByPhoneNumber(String phoneNumber);
+	List<GetAllRewardPoints> getCountOfRewardPointsByPhoneNumber(String phoneNumber);
 
-     DetailedRewardPointsResponse getDetailedRewardPointsByMonth(String phoneNumber, int numberOfMonths);
-
+	DetailedRewardPointsResponse getDetailedRewardPointsByMonth(String phoneNumber, int numberOfMonths);
 
 }
-
