@@ -31,6 +31,7 @@ Please refer documentation folder for postman collection and artifacts.<br>
 •	Maven<br>
 •	Swagger OpenAPI3<br>
 •	SLF4J logging<br>
+•	Junit5<br>
 
 # Installation
 1.	git clone https://github.com/sravanthi24/rewards.git
